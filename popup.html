@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>Popup</title>
     <link href="popup.css" rel="stylesheet">
   </head>
 
   <body>
-    <div>
-
+    <div id='main'>
+        <table id='payment-table'>
+          <tehead>
+            <tr><th>Номер</th><th>Дата</th><th>Сумма</th><th>Клиент</th><th>Комментарий</th></tr>
+          </tehead>
+          <tbody>
+            <tr><td>1</td><td>10.02.2018</td><td>1000</td><td>Сергей</td><td>делал обработку</td></tr>
+          </tbody>
+        </table>
     </div>
-    <script src="popup.js"></script>
     <script src="PaymentClass.js"></script>
-  <script>
-  const Payment = new PaymentClass();
-
-  </script>
-    </body>  
+    <script src="popup.js"></script>    
+  </body>  
 </html>

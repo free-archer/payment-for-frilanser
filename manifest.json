@@ -6,7 +6,8 @@
 
   "background": {
     "scripts": [
-      "popup.js"
+      "popup.js",
+      "PaymentClass.js"
     ],
     "persistent": false
   },
