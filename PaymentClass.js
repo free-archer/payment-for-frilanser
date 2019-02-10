@@ -10,13 +10,15 @@ const PaymentClass = function () {
   this.Data = [];
 
   this.setStorage = function() {
-      chrome.storage.local.set({"pymentData": this.Data});
+      //chrome.storage.local.set({"pymentData": this.Data});
+    localStorage["pymentData"] = JSON.stringify(this.Data);
   };
 
   this.getStorage = function () {
-      this.pymentData = chrome.storage.local.get(["pymentData"],  function(result) {
-        console.log('Value currently is ' + result);
-      });
+      // this.pymentData = chrome.storage.local.get(["pymentData"],  function(result) {
+      //   console.log('Value currently is ' + result);
+      // });
+    this.Data = JSON.parse(localStorage["pymentData"]);
   };
 
   this.addNewRow = (table, Data) => {

@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const Payment = new PaymentClass();
+Payment.getStorage();
+console.log(Payment.Data);
 
 //testdate
 const testData = {
@@ -17,14 +19,6 @@ Payment.Data.push(testData);
 //testdate
 
 const table = document.getElementById('payment-table');
-Payment.addNewRow(table, [testData]);
+Payment.addNewRow(table, Payment.Data);
 
-Payment.setStorage();
-const res = chrome.storage.local.set({"data":55});
-console.log(res);
 
-const res2 = chrome.storage.local.get([{'data' : {}}], function(result) {return result});
-console.log(res2);
-
-const storegeData = Payment.getStorage();
-console.log(storegeData);
