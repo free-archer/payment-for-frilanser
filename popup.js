@@ -4,13 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const Payment = new PaymentClass();
+
+const table = document.getElementById('payment-table');
+Payment.table = table;
+
 console.log(Payment);
 Payment.getStorage();
 console.log('Payment.Data');
 console.log(Payment.Data);
 
-const table = document.getElementById('payment-table');
-Payment.table = table;
+
 
 const divMain = document.getElementById('main');
 Payment.addButtonAdd(divMain, 'btn-add');

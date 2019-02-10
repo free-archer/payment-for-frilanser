@@ -20,20 +20,18 @@ const PaymentClass = function () {
   };
 
   this.getStorage = () => {
+    if (chrome.storage) {
        chrome.storage.sync.get(["pymentData"], (result) => {
         const Data = result.pymentData;
         this.fullTable(Data);
        });
-      /*if (localStorage["pymentData"]) {
-        this.Data = JSON.parse(localStorage["pymentData"]);
-      }*/
+      } else {
+      if (localStorage["pymentData"]) {
+        const Data = JSON.parse(localStorage["pymentData"]);
+        this.fullTable(Data);
+      }
+    }
   };
-
-  chrome.storage.onChanged.addListener(function(changes, namespace) {
-    console.log("changes.pymentData");
-    console.log(changes);
-    this.Data = changes.pymentData.slice(0);
-  });
 
   this.fullTable = (Data) => {
     this.addTableHeader();
