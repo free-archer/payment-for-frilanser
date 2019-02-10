@@ -15,8 +15,11 @@ const PaymentClass = function () {
   //this.Data = [];
 
   this.setStorage = () => {
-    chrome.storage.sync.set({"pymentData": this.Data});
-    //localStorage["pymentData"] = JSON.stringify(this.Data);
+    if (chrome.storage) {
+      chrome.storage.sync.set({"pymentData": this.Data});
+    } else {
+      localStorage["pymentData"] = JSON.stringify(this.Data);
+    }
   };
 
   this.getStorage = () => {
@@ -26,23 +29,24 @@ const PaymentClass = function () {
         this.fullTable(Data);
        });
       } else {
-      if (localStorage["pymentData"]) {
-        const Data = JSON.parse(localStorage["pymentData"]);
-        this.fullTable(Data);
+        if (localStorage["pymentData"]) {
+          const Data = JSON.parse(localStorage["pymentData"]);
+          this.fullTable(Data);
+        } else {
+          this.addTableHeader();
+        }
       }
-    }
   };
 
   this.fullTable = (Data) => {
-    this.addTableHeader();
     console.log(' .fullTable');
     console.log(Data);
     if (Data) {
-    Data.forEach(element => {
-      console.log(element);
-      this.addNewRow(element);
-    });
-  }
+      Data.forEach(element => {
+        console.log(element);
+        this.addNewRow(element);
+      });
+    }
   };
 
   this.getDataFromTable = () => {
@@ -95,7 +99,7 @@ this.addInput = (value, type, name, className) =>  {
 
   this.addButtonAdd = (div, className) =>  {
     btn = document.createElement('button');
-    btn.classList.add(className);
+    btn.classList.add(...className);
     btn.name = 'ButtonAdd';
     btn.innerText = 'Добавить запись';
 
@@ -108,7 +112,7 @@ this.addInput = (value, type, name, className) =>  {
 
   this.addButtonSave = (div, className) =>  {
     btn = document.createElement('button');
-    btn.classList.add(className);
+    btn.classList.add(...className);
     btn.name = 'ButtonSave';
     btn.innerText = 'Сохранить';
 
