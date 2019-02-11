@@ -32,18 +32,14 @@ const PaymentClass = function () {
         if (localStorage["pymentData"]) {
           const Data = JSON.parse(localStorage["pymentData"]);
           this.fullTable(Data);
-        } else {
-          this.addTableHeader();
         }
       }
   };
 
   this.fullTable = (Data) => {
-    console.log(' .fullTable');
-    console.log(Data);
+    this.addTableHeader();
     if (Data) {
       Data.forEach(element => {
-        console.log(element);
         this.addNewRow(element);
       });
     }
@@ -51,7 +47,6 @@ const PaymentClass = function () {
 
   this.getDataFromTable = () => {
     const table = this.table;
-   // this.Data = Array();
     for (let row=1; row < table.rows.length; row++) 
       {
         const itRow = table.rows[row];
@@ -76,6 +71,7 @@ const PaymentClass = function () {
     for (const key in this.tableHeader) {
       row.insertCell().textContent = this.tableHeader[key];
     }
+    row.insertCell().textContent = 'Удалить';
   }
 
   this.addNewRow = (element) => {
@@ -84,10 +80,11 @@ const PaymentClass = function () {
       row.insertCell(1).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
       row.insertCell(2).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
       row.insertCell(3).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
+      row.insertCell(4).appendChild(this.addButtonDel());
   };
 
 this.addInput = (value, type, name, className) =>  {
-  input = document.createElement('input');
+  const input = document.createElement('input');
   input.setAttribute("type", type);
   input.setAttribute("name", name);
   input.value = value;
@@ -98,7 +95,7 @@ this.addInput = (value, type, name, className) =>  {
 };
 
   this.addButtonAdd = (div, className) =>  {
-    btn = document.createElement('button');
+    const btn = document.createElement('button');
     btn.classList.add(...className);
     btn.name = 'ButtonAdd';
     btn.innerText = 'Добавить запись';
@@ -111,7 +108,7 @@ this.addInput = (value, type, name, className) =>  {
   };
 
   this.addButtonSave = (div, className) =>  {
-    btn = document.createElement('button');
+    const btn = document.createElement('button');
     btn.classList.add(...className);
     btn.name = 'ButtonSave';
     btn.innerText = 'Сохранить';
@@ -120,7 +117,18 @@ this.addInput = (value, type, name, className) =>  {
       this.getDataFromTable();
       this.setStorage();
     });
+  };
 
-    div.appendChild(btn);
+    this.addButtonDel = () =>  {
+      const btn = document.createElement('button');
+      btn.classList.add('btn', 'btn-del');
+      btn.name = 'ButtonDel';
+      btn.innerText = 'X';
+  
+      btn.addEventListener('click', (env) =>  {
+        this.table.deleteRow(env.target.parentElement.parentElement.rowIndex);
+      });  
+      
+      return btn
   };
 };
