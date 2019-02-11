@@ -7,11 +7,17 @@ const Payment = new PaymentClass();
 
 const table = document.getElementById('payment-table');
 Payment.table = table;
-
-Payment.getStorage();
-
+const ulCategory = document.getElementById('ul-cat');
+Payment.ulCategory = ulCategory;
 const divMain = document.getElementById('main');
-Payment.addButtonAdd(divMain, ['btn', 'btn-add']);
-Payment.addButtonSave(divMain, ['btn', 'btn-save']);
+Payment.divMain = divMain;
+
+Payment.Init();
+
+
+
+
+
+
 
 

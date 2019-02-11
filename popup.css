@@ -1,3 +1,31 @@
+body, ul, li {
+    margin: 0;
+    padding: 0;
+}
+#contener {
+    display: flex;
+    margin: 5px;
+}
+#aside-left, #main {
+    border: 1px solid #333;
+}
+#aside-left {
+    margin-right: 10px;
+}
+
 th, tr, td {
     border: 1px solid #333;
+}
+
+#ul-cat {
+    text-decoration: none;
+    list-style-type: none;
+    padding: 5px;
+}
+
+#ul-cat li {
+
+}
+#ul-cat li:hover {
+    text-decoration: underline;
 }

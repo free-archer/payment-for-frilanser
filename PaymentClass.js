@@ -12,7 +12,12 @@ const PaymentClass = function () {
     comment: ''
   };
 
-  //this.Data = [];
+  this.Data = [];
+  this.Clients = new Set();
+
+  this.Init = () => {
+    this.getStorage();
+  };
 
   this.setStorage = () => {
     if (chrome.storage) {
@@ -26,14 +31,39 @@ const PaymentClass = function () {
     if (chrome.storage) {
        chrome.storage.sync.get(["pymentData"], (result) => {
         const Data = result.pymentData;
+        this.Data = Data;
+
+        this.fullClients(this.ulCategory);
         this.fullTable(Data);
+        this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
+        this.addButtonSave(this.divMain, ['btn', 'btn-save']);        
        });
       } else {
         if (localStorage["pymentData"]) {
           const Data = JSON.parse(localStorage["pymentData"]);
+          this.Data = Data;
+          this.fullClients(this.ulCategory);
           this.fullTable(Data);
+          this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
+          this.addButtonSave(this.divMain, ['btn', 'btn-save']);  
         }
       }
+  };
+
+  this.fullClients = (ul) => {
+    this.getClients();
+    
+    for (const client of this.Clients) {
+      const li = document.createElement('li');
+      li.textContent = client;
+      ul.appendChild(li);
+    }
+  };
+
+  this.getClients= () => {
+    for (const data of this.Data) {
+      this.Clients.add(data.client);
+    }
   };
 
   this.fullTable = (Data) => {
@@ -46,6 +76,7 @@ const PaymentClass = function () {
   };
 
   this.getDataFromTable = () => {
+    this.Data= {};
     const table = this.table;
     for (let row=1; row < table.rows.length; row++) 
       {
@@ -99,12 +130,11 @@ this.addInput = (value, type, name, className) =>  {
     btn.classList.add(...className);
     btn.name = 'ButtonAdd';
     btn.innerText = 'Добавить запись';
+    div.appendChild(btn);
 
     btn.addEventListener('click', (env) => {
       this.addNewRow (this.table, this.emptyLine);
     });
-
-    div.appendChild(btn);
   };
 
   this.addButtonSave = (div, className) =>  {
@@ -112,6 +142,7 @@ this.addInput = (value, type, name, className) =>  {
     btn.classList.add(...className);
     btn.name = 'ButtonSave';
     btn.innerText = 'Сохранить';
+    div.appendChild(btn);
 
     btn.addEventListener('click', (env) =>  {
       this.getDataFromTable();
