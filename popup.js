@@ -1,5 +1,5 @@
 "use strict";
-const Payment = new PaymentClass();
+let Payment = new PaymentClass();
 
 const table = document.getElementById('payment-table');
 Payment.table = table;

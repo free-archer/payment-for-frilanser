@@ -1,28 +1,36 @@
 "use strict";
-const PaymentClass = function () {
-  this.tableHeader = {
-    'id': 'Номер',
-    'date': 'Дата',
-    'summa': 'Сумма',
-    'client': 'Клиент',
-    'comment': 'Комментарий',
-  };
-  this.emptyLine = {
-    id: 0,
-    date: new Date(),
-    summa: 0,
-    client: '',
-    comment: ''
-  };
+class PaymentClass {
+  constructor() {
+    this.tableHeader = {
+      'id': 'Номер',
+      'date': 'Дата',
+      'summa': 'Сумма',
+      'client': 'Клиент',
+      'comment': 'Комментарий',
+    };
+    this.emptyLine = {
+      id: 0,
+      date: new Date(),
+      summa: 0,
+      client: '',
+      comment: ''
+    };
 
-  this.Data = [];
-  this.Clients = new Set();
+    this.Data = [];
+    this.Clients = new Set();
+  }
 
-  this.Init = () => {
+  Init() {
+    this.clearTable();
+    this.addTableHeader();
+
     this.getStorage();
+
+    this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
+    this.addButtonSave(this.divMain, ['btn', 'btn-save']);      
   };
 
-  this.setStorage = () => {
+ setStorage() {
     if (chrome.storage) {
       chrome.storage.sync.set({"pymentData": this.Data});
     } else {
@@ -30,7 +38,7 @@ const PaymentClass = function () {
     }
   };
 
-  this.getStorage = () => {
+  getStorage() {
     if (chrome.storage) {
        chrome.storage.sync.get(["pymentData"], (result) => {
         const Data = result.pymentData;
@@ -38,8 +46,6 @@ const PaymentClass = function () {
 
         this.fullClients(this.ulCategory);
         this.fullTable(Data);
-        this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
-        this.addButtonSave(this.divMain, ['btn', 'btn-save']);        
        });
       } else {
         if (localStorage["pymentData"]) {
@@ -47,13 +53,11 @@ const PaymentClass = function () {
           this.Data = Data;
           this.fullClients(this.ulCategory);
           this.fullTable(Data);
-          this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
-          this.addButtonSave(this.divMain, ['btn', 'btn-save']);  
         }
-      }
+    }
   };
 
-  this.fullClients = (ul) => {
+  fullClients(ul) {
     this.getClients();
     
     for (const client of this.Clients) {
@@ -76,15 +80,13 @@ const PaymentClass = function () {
     }
   };
 
-  this.getClients= () => {
+  getClients() {
     for (const data of this.Data) {
       this.Clients.add(data.client);
     }
   };
 
-  this.fullTable = (Data) => {
-    this.clearTable();
-    this.addTableHeader();
+  fullTable(Data) {
     if (Data) {
       const tbody= document.createElement("tbody");
       Data.forEach(element => {
@@ -94,32 +96,11 @@ const PaymentClass = function () {
     }
   };
 
-  this.clearTable = () => {
+  clearTable() {
     this.table.innerText='';
   }
 
-  this.getDataFromTable = () => {
-    this.Data= [];
-    const table = this.table;
-    for (let row=1; row < table.rows.length; row++) 
-      {
-        const itRow = table.rows[row];
-        const itData = {};
-        for (let cell=0; cell < itRow.cells.length; cell++) 
-        {
-          const itCell = itRow.cells[cell];
-          const cildNode = itCell.childNodes[0];
-          if (cildNode.nodeName == 'INPUT') {
-            itData[cildNode.name] = cildNode.value
-          } else {
-            itData[cildNode.name] = cildNode.textContent;
-          }
-        }
-        this.Data.push(itData);
-      }
-  };
-
-  this.addTableHeader = () => {
+  addTableHeader() {
     const header = this.table.createTHead();
     const row = header.insertRow(0);    
     for (const key in this.tableHeader) {
@@ -128,13 +109,16 @@ const PaymentClass = function () {
     row.insertCell().textContent = 'Удалить';
   }
 
-  this.addNewRow = (element, tbody, isNew) => {
+  addNewRow(element, tbody, isNew) {
     const row = tbody.insertRow();
 
     if (isNew == true) {
+      if (this.Data.length > 0) {
       element.id = this.Data[this.Data.length-1].id;
       element.id++;
-
+      } else {
+        element.id = 0;
+      }
     }
 
     row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
@@ -154,9 +138,11 @@ const PaymentClass = function () {
       //const id = this.table.rows[rowIndex].cells[0].children[0].value;
       this.setRowDatatoData(rowIndex);
     });
+
+    this.Data.push(element);
   };
 
-  this.setRowDatatoData = (rowIndex) => {
+  setRowDatatoData(rowIndex) {
     const itRow = this.table.rows[rowIndex];
     const itData = {};
     for (let cell=0; cell < itRow.cells.length; cell++) 
@@ -177,7 +163,7 @@ const PaymentClass = function () {
     })
   };
   
-  this.addInput = (value, type, name, className) =>  {
+  addInput(value, type, name, className) {
     const input = document.createElement('input');
     input.setAttribute("type", type);
     input.setAttribute("name", name);
@@ -188,7 +174,7 @@ const PaymentClass = function () {
     return input;
   };
 
-  this.addButtonAdd = (div, className) =>  {
+  addButtonAdd(div, className) {
     const btn = document.createElement('button');
     btn.classList.add(...className);
     btn.name = 'ButtonAdd';
@@ -202,7 +188,7 @@ const PaymentClass = function () {
     });
   };
 
-  this.addButtonSave = (div, className) =>  {
+  addButtonSave(div, className) {
     const btn = document.createElement('button');
     btn.classList.add(...className);
     btn.name = 'ButtonSave';
@@ -215,7 +201,7 @@ const PaymentClass = function () {
     });
   };
 
-  this.addButtonDel = () =>  {
+  addButtonDel()  {
     const btn = document.createElement('button');
     btn.classList.add('btn', 'btn-del');
     btn.name = 'ButtonDel';
@@ -235,7 +221,7 @@ const PaymentClass = function () {
     return btn;
   };
 
-  this.addButtonApply = () =>  {
+  addButtonApply()  {
     const btn = document.createElement('button');
     btn.classList.add('btn', 'btn-apply');
     btn.name = 'ButtonApply';
