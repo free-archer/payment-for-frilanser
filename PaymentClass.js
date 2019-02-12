@@ -127,26 +127,39 @@ const PaymentClass = function () {
     row.insertCell().textContent = 'Удалить';
   }
 
-  this.addNewRow = (element, tbody) => {
-      const row = tbody.insertRow();
-      row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
-      row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
-      row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
-      row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
-      row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
+  this.addNewRow = (element, tbody, isNew) => {
+    const row = tbody.insertRow();
+
+    if (isNew == true) {
+      element.id = this.Data[this.Data.length-1].id;
+      element.id++;
+
+    }
+
+    row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
+    row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
+    row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
+    row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
+    row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
+
+    if (isNew == true) {
+      row.insertCell(5).appendChild(this.addButtonApply());
+    } else {
       row.insertCell(5).appendChild(this.addButtonDel());
+    }
+  
   };
 
-this.addInput = (value, type, name, className) =>  {
-  const input = document.createElement('input');
-  input.setAttribute("type", type);
-  input.setAttribute("name", name);
-  input.value = value;
-  input.valueAsDat = value;
-  input.classList.add(className);
+  this.addInput = (value, type, name, className) =>  {
+    const input = document.createElement('input');
+    input.setAttribute("type", type);
+    input.setAttribute("name", name);
+    input.value = value;
+    input.valueAsDat = value;
+    input.classList.add(className);
 
-  return input;
-};
+    return input;
+  };
 
   this.addButtonAdd = (div, className) =>  {
     const btn = document.createElement('button');
@@ -156,7 +169,9 @@ this.addInput = (value, type, name, className) =>  {
     div.appendChild(btn);
 
     btn.addEventListener('click', (env) => {
-      this.addNewRow (this.table, this.emptyLine);
+      const tbody= document.createElement("tbody");
+      this.addNewRow(this.emptyLine, tbody, true);
+      this.table.appendChild(tbody);
     });
   };
 
@@ -168,21 +183,55 @@ this.addInput = (value, type, name, className) =>  {
     div.appendChild(btn);
 
     btn.addEventListener('click', (env) =>  {
-      this.getDataFromTable();
+      //this.getDataFromTable();
       this.setStorage();
     });
   };
 
-    this.addButtonDel = () =>  {
-      const btn = document.createElement('button');
-      btn.classList.add('btn', 'btn-del');
-      btn.name = 'ButtonDel';
-      btn.innerText = 'X';
-  
-      btn.addEventListener('click', (env) =>  {
-        this.table.deleteRow(env.target.parentElement.parentElement.rowIndex);
-      });  
-      
-      return btn
+  this.addButtonDel = () =>  {
+    const btn = document.createElement('button');
+    btn.classList.add('btn', 'btn-del');
+    btn.name = 'ButtonDel';
+    btn.innerText = 'X';
+
+    btn.addEventListener('click', (env) =>  {
+      const id = env.target.parentElement.parentElement.rowIndex;
+      this.table.deleteRow(id);
+
+      this.Data.forEach((element, index) => {
+        if (element.id == id) {
+          this.Data.splice(index, 1);
+        }
+      })
+    })  
+    
+    return btn;
   };
+
+  this.addButtonApply = () =>  {
+    const btn = document.createElement('button');
+    btn.classList.add('btn', 'btn-apply');
+    btn.name = 'ButtonApply';
+    btn.innerText = 'V';
+
+    btn.addEventListener('click', (env) =>  {
+      const id = env.target.parentElement.parentElement.rowIndex;
+
+      const itRow = table.rows[id];
+      const itData = {};
+      for (let cell=0; cell < itRow.cells.length; cell++) 
+      {
+        const itCell = itRow.cells[cell];
+        const cildNode = itCell.childNodes[0];
+        if (cildNode.nodeName == 'INPUT') {
+          itData[cildNode.name] = cildNode.value
+        } else {
+          itData[cildNode.name] = cildNode.textContent;
+        }
+      }
+      this.Data.push(itData);
+      });
+    return btn;
+  };  
+
 };
