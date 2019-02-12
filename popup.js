@@ -1,8 +1,4 @@
-//console.log('Start1');
-document.addEventListener("DOMContentLoaded", function () {
-   console.log('Start');
-});
-
+"use strict";
 const Payment = new PaymentClass();
 
 const table = document.getElementById('payment-table');

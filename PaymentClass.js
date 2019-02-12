@@ -1,3 +1,4 @@
+"use strict";
 const PaymentClass = function () {
   this.tableHeader = {
     'id': 'Номер',
@@ -147,9 +148,35 @@ const PaymentClass = function () {
     } else {
       row.insertCell(5).appendChild(this.addButtonDel());
     }
-  
+
+    row.addEventListener('change', (env) => {
+      const rowIndex = env.currentTarget.rowIndex;
+      //const id = this.table.rows[rowIndex].cells[0].children[0].value;
+      this.setRowDatatoData(rowIndex);
+    });
   };
 
+  this.setRowDatatoData = (rowIndex) => {
+    const itRow = this.table.rows[rowIndex];
+    const itData = {};
+    for (let cell=0; cell < itRow.cells.length; cell++) 
+    {
+      const itCell = itRow.cells[cell];
+      const cildNode = itCell.childNodes[0];
+      if (cildNode.nodeName == 'INPUT') {
+        itData[cildNode.name] = cildNode.value
+      } else {
+        itData[cildNode.name] = cildNode.textContent;
+      }
+    }
+    
+    this.Data.forEach( (element, ind) => {
+      if (element.id == itData.id) {
+        this.Data[ind] = itData;
+      }
+    })
+  };
+  
   this.addInput = (value, type, name, className) =>  {
     const input = document.createElement('input');
     input.setAttribute("type", type);
@@ -233,5 +260,6 @@ const PaymentClass = function () {
       });
     return btn;
   };  
+
 
 };
