@@ -28,4 +28,5 @@ th, tr, td {
 }
 #ul-cat li:hover {
     text-decoration: underline;
+    cursor: pointer;
 }

@@ -57,6 +57,19 @@ const PaymentClass = function () {
       const li = document.createElement('li');
       li.textContent = client;
       ul.appendChild(li);
+      const itClientData = new Array();
+
+      li.addEventListener('click', (env) => {
+        const itClient = env.currentTarget.textContent;
+
+        for (const data of this.Data) {
+          if (data.client == itClient) {
+            itClientData.push(data);
+          }
+        }
+
+        this.fullTable(itClientData);
+      });
     }
   };
 
@@ -67,16 +80,23 @@ const PaymentClass = function () {
   };
 
   this.fullTable = (Data) => {
+    this.clearTable();
     this.addTableHeader();
     if (Data) {
+      const tbody= document.createElement("tbody");
       Data.forEach(element => {
-        this.addNewRow(element);
+        this.addNewRow(element, tbody);
       });
+      this.table.appendChild(tbody);
     }
   };
 
+  this.clearTable = () => {
+    this.table.innerText='';
+  }
+
   this.getDataFromTable = () => {
-    this.Data= {};
+    this.Data= [];
     const table = this.table;
     for (let row=1; row < table.rows.length; row++) 
       {
@@ -105,8 +125,9 @@ const PaymentClass = function () {
     row.insertCell().textContent = 'Удалить';
   }
 
-  this.addNewRow = (element) => {
-      const row = this.table.insertRow();
+  this.addNewRow = (element, tbody) => {
+      //const row = this.table.insertRow();
+      const row = tbody.insertRow();
       row.insertCell(0).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
       row.insertCell(1).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
       row.insertCell(2).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
