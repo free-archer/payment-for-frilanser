@@ -1,11 +1,13 @@
 const PaymentClass = function () {
   this.tableHeader = {
+    'id': 'Номер',
     'date': 'Дата',
     'summa': 'Сумма',
     'client': 'Клиент',
     'comment': 'Комментарий',
   };
   this.emptyLine = {
+    id: 0,
     date: new Date(),
     summa: 0,
     client: '',
@@ -126,13 +128,13 @@ const PaymentClass = function () {
   }
 
   this.addNewRow = (element, tbody) => {
-      //const row = this.table.insertRow();
       const row = tbody.insertRow();
-      row.insertCell(0).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
-      row.insertCell(1).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
-      row.insertCell(2).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
-      row.insertCell(3).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
-      row.insertCell(4).appendChild(this.addButtonDel());
+      row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
+      row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
+      row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
+      row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
+      row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
+      row.insertCell(5).appendChild(this.addButtonDel());
   };
 
 this.addInput = (value, type, name, className) =>  {
