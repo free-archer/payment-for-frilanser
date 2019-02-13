@@ -17,12 +17,11 @@ class PaymentClass {
     };
 
     this.Data = [];
-    this.Clients = new Set();
+    this.Clients = new Set(['Все']);
   }
 
   Init() {
     this.clearTable();
-    this.addTableHeader();
 
     this.getStorage();
 
@@ -67,8 +66,14 @@ class PaymentClass {
       
       li.addEventListener('click', (env) => {
         const itClient = env.currentTarget.textContent;
+
+        if (itClient == 'Все') {
+          this.fullTable(this.Data);  
+          return;
+        }
+
         const itClientData = new Array();
-        
+
         for (const data of this.Data) {
           if (data.client == itClient) {
             itClientData.push(data);
@@ -99,6 +104,7 @@ class PaymentClass {
 
   clearTable() {
     this.table.innerText='';
+    this.addTableHeader();
   }
 
   addTableHeader() {
@@ -129,11 +135,7 @@ class PaymentClass {
     row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
     row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
 
-    if (isNew == true) {
-      row.insertCell(5).appendChild(this.addButtonApply());
-    } else {
-      row.insertCell(5).appendChild(this.addButtonDel());
-    }
+    row.insertCell(5).appendChild(this.addButtonDel());
 
     row.addEventListener('change', (env) => {
       const rowIndex = env.currentTarget.rowIndex;
@@ -149,7 +151,7 @@ class PaymentClass {
       const itCell = itRow.cells[cell];
       const cildNode = itCell.childNodes[0];
       if (cildNode.nodeName == 'INPUT') {
-        itData[cildNode.name] = cildNode.value
+        itData[cildNode.name] = cildNode.value;
       } else {
         itData[cildNode.name] = cildNode.textContent;
       }
@@ -219,32 +221,4 @@ class PaymentClass {
     
     return btn;
   };
-
-  addButtonApply()  {
-    const btn = document.createElement('button');
-    btn.classList.add('btn', 'btn-apply');
-    btn.name = 'ButtonApply';
-    btn.innerText = 'V';
-
-    btn.addEventListener('click', (env) =>  {
-      const id = env.target.parentElement.parentElement.rowIndex;
-
-      const itRow = table.rows[id];
-      const itData = {};
-      for (let cell=0; cell < itRow.cells.length; cell++) 
-      {
-        const itCell = itRow.cells[cell];
-        const cildNode = itCell.childNodes[0];
-        if (cildNode.nodeName == 'INPUT') {
-          itData[cildNode.name] = cildNode.value
-        } else {
-          itData[cildNode.name] = cildNode.textContent;
-        }
-      }
-      this.Data.push(itData);
-      });
-    return btn;
-  };  
-
-
 };
