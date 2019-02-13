@@ -16,7 +16,7 @@ class PaymentClass {
       comment: ''
     };
 
-    this.Data = [];
+    this.Data = new Map();
     this.Clients = new Set();
   }
 
@@ -34,7 +34,7 @@ class PaymentClass {
     if (chrome.storage) {
       chrome.storage.sync.set({"pymentData": this.Data});
     } else {
-      localStorage["pymentData"] = JSON.stringify(this.Data);
+      localStorage["pymentData"] = JSON.stringify(strMapToObj(this.Data));
     }
   };
 
@@ -50,14 +50,34 @@ class PaymentClass {
       } else {
         if (localStorage["pymentData"]) {
           const Data = JSON.parse(localStorage["pymentData"]);
-          this.Data = Data;
+
+          this.Data= new Map(objToStrMap(Data));
+          //this.Data.clear();
           this.fullClients(this.ulCategory);
           this.fullTable(Data);
         }
     }
   };
 
+
+  strMapToObj(strMap) {
+    let obj = Object.create(null);
+    for (let [k,v] of strMap) {
+        obj[k] = v;
+    }
+    return obj;
+  }
+
+  objToStrMap(obj) {
+    let strMap = new Map();
+    for (let k of Object.keys(obj)) {
+        strMap.set(k, obj[k]);
+    }
+    return strMap;
+  }
+
   fullClients(ul) {
+    if (this.Data.size == 0) return;
     this.getClients();
     
     for (const client of this.Clients) {
@@ -69,11 +89,12 @@ class PaymentClass {
       li.addEventListener('click', (env) => {
         const itClient = env.currentTarget.textContent;
 
-        for (const data of this.Data) {
-          if (data.client == itClient) {
-            itClientData.push(data);
+        //for (const data of this.Data) {
+          this.Data.forEach((element) => {
+          if (element.client == itClient) {
+            itClientData.push(element);
           }
-        }
+        });
 
         this.fullTable(itClientData);
       });
@@ -81,12 +102,16 @@ class PaymentClass {
   };
 
   getClients() {
-    for (const data of this.Data) {
-      this.Clients.add(data.client);
-    }
+    if (this.Data.size == 0) return;
+
+    this.Data.forEach((element) => {
+      this.Clients.add(element.client);
+    });
   };
 
   fullTable(Data) {
+    if (this.Data.size == 0) return;
+
     if (Data) {
       const tbody= document.createElement("tbody");
       Data.forEach(element => {
@@ -114,8 +139,7 @@ class PaymentClass {
 
     if (isNew == true) {
       if (this.Data.length > 0) {
-      element.id = this.Data[this.Data.length-1].id;
-      element.id++;
+      element.id = getNextNumber();
       } else {
         element.id = 0;
       }
@@ -139,7 +163,7 @@ class PaymentClass {
       this.setRowDatatoData(rowIndex);
     });
 
-    this.Data.push(element);
+    this.Data.set(element.id, element);
   };
 
   setRowDatatoData(rowIndex) {
@@ -155,12 +179,7 @@ class PaymentClass {
         itData[cildNode.name] = cildNode.textContent;
       }
     }
-    
-    this.Data.forEach( (element, ind) => {
-      if (element.id == itData.id) {
-        this.Data[ind] = itData;
-      }
-    })
+      this.Data[itData.id] = itData;
   };
   
   addInput(value, type, name, className) {
@@ -228,7 +247,7 @@ class PaymentClass {
     btn.innerText = 'V';
 
     btn.addEventListener('click', (env) =>  {
-      const id = env.target.parentElement.parentElement.rowIndex;
+/*       const id = env.target.parentElement.parentElement.rowIndex;
 
       const itRow = table.rows[id];
       const itData = {};
@@ -242,10 +261,16 @@ class PaymentClass {
           itData[cildNode.name] = cildNode.textContent;
         }
       }
-      this.Data.push(itData);
+      this.Data.set(itData); */
       });
     return btn;
   };  
 
+  getNextNumber() {
+    const ar = Array.from(this.Data.keys());
+    ar.sort((a,b) => {return b-a});
+    const number = ar[0];
+    return number ? number++ : 0;
+  }
 
 };
