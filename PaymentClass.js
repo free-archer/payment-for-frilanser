@@ -64,11 +64,11 @@ class PaymentClass {
       const li = document.createElement('li');
       li.textContent = client;
       ul.appendChild(li);
-      const itClientData = new Array();
-
+      
       li.addEventListener('click', (env) => {
         const itClient = env.currentTarget.textContent;
-
+        const itClientData = new Array();
+        
         for (const data of this.Data) {
           if (data.client == itClient) {
             itClientData.push(data);
@@ -87,6 +87,7 @@ class PaymentClass {
   };
 
   fullTable(Data) {
+    this.clearTable();
     if (Data) {
       const tbody= document.createElement("tbody");
       Data.forEach(element => {
@@ -113,12 +114,13 @@ class PaymentClass {
     const row = tbody.insertRow();
 
     if (isNew == true) {
+      let id = 0;
       if (this.Data.length > 0) {
-      element.id = this.Data[this.Data.length-1].id;
-      element.id++;
-      } else {
-        element.id = 0;
+        id = this.Data[this.Data.length-1].id;
+        id++;
+        this.Data.push(this.emptyLine);
       }
+      element.id = id;
     }
 
     row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
@@ -135,11 +137,8 @@ class PaymentClass {
 
     row.addEventListener('change', (env) => {
       const rowIndex = env.currentTarget.rowIndex;
-      //const id = this.table.rows[rowIndex].cells[0].children[0].value;
       this.setRowDatatoData(rowIndex);
     });
-
-    this.Data.push(element);
   };
 
   setRowDatatoData(rowIndex) {
@@ -196,7 +195,6 @@ class PaymentClass {
     div.appendChild(btn);
 
     btn.addEventListener('click', (env) =>  {
-      //this.getDataFromTable();
       this.setStorage();
     });
   };
@@ -208,8 +206,9 @@ class PaymentClass {
     btn.innerText = 'X';
 
     btn.addEventListener('click', (env) =>  {
-      const id = env.target.parentElement.parentElement.rowIndex;
-      this.table.deleteRow(id);
+      const rowIndex = env.target.parentElement.parentElement.rowIndex;
+      const id = this.table.rows[rowIndex].cells[0].firstChild.value;
+      this.table.deleteRow(rowIndex);
 
       this.Data.forEach((element, index) => {
         if (element.id == id) {
