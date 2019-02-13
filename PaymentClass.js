@@ -31,6 +31,7 @@ class PaymentClass {
 
  setStorage() {
     if (chrome.storage) {
+      console.log(this.Data);
       chrome.storage.sync.set({"pymentData": this.Data});
     } else {
       localStorage["pymentData"] = JSON.stringify(this.Data);
@@ -124,8 +125,8 @@ class PaymentClass {
       if (this.Data.length > 0) {
         id = this.Data[this.Data.length-1].id;
         id++;
-        this.Data.push(this.emptyLine);
       }
+      this.Data.push(this.emptyLine);
       element.id = id;
     }
 
