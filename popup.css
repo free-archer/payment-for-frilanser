@@ -3,7 +3,9 @@ body, ul, li, input, button {
     padding: 0;
     border: none;
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
 }
+
 #contener {
     display: flex;
     margin: 5px;
@@ -15,6 +17,7 @@ body, ul, li, input, button {
 }
 #aside-left {
     margin-right: 10px;
+    min-width: 80px;
 }
 
 #payment-table {
@@ -26,7 +29,7 @@ body, ul, li, input, button {
 }
 
 #payment-table thead tr td {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
     padding-left: 10px;
     padding-right: 10px;
@@ -54,6 +57,11 @@ input {
 }
 .input-date {
     text-align: center;
+    width: 120px;
+}
+.input-summa {
+    text-align: center;
+    width: 70px;
 }
 
 #ul-cat {
@@ -63,10 +71,16 @@ input {
 }
 
 #ul-cat li {
+    font-size: 14px;
     color: #8D8173;
     padding-left: 5px;
     padding-right: 5px;
+    text-align: center;
 }
+#ul-cat li:first-child {
+    color: #F56433;
+}
+
 #ul-cat li:hover {
     text-decoration: underline;
     cursor: pointer;
