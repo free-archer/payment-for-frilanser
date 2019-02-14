@@ -130,7 +130,9 @@ class PaymentClass {
       element.id = id;
     }
 
-    row.insertCell(0).appendChild(this.addInput(element.id, 'id', 'id', 'input-id'));
+    const inputId = this.addInput(element.id, 'id', 'id', 'input-id');
+    inputId.setAttribute('readonly', true)
+    row.insertCell(0).appendChild(inputId);
     row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
     row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
     row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
