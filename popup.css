@@ -54,6 +54,7 @@ input {
 .input-id {
     width: 30px;
     background-color:  #E1E3E0;
+    text-align: center;
 }
 .input-date {
     text-align: center;
@@ -63,7 +64,14 @@ input {
     text-align: center;
     width: 70px;
 }
-
+.client-select {
+    padding: 1px;
+    padding-left: 3px;
+    padding-top: 2px;
+    height: 30px;
+    background: whitesmoke;
+    min-width: 120px;
+}
 #ul-cat {
     text-decoration: none;
     list-style-type: none;

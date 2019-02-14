@@ -135,7 +135,7 @@ class PaymentClass {
     row.insertCell(0).appendChild(inputId);
     row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
     row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
-    row.insertCell(3).appendChild(this.addInput(element.client, 'text', 'client', 'input-client'));
+    row.insertCell(3).appendChild(this.addSelect('client-select'));
     row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
 
     row.insertCell(5).appendChild(this.addButtonDel());
@@ -177,6 +177,22 @@ class PaymentClass {
 
     return input;
   };
+
+  addSelect(className) {
+    const select = document.createElement('select');
+    select.classList.add(className)
+
+    for (const client of this.Clients) {
+      if (client != 'Все') {
+        const option = document.createElement('option');
+        option.value = client;
+        option.textContent = client;
+        select.appendChild(option);
+      }
+    }
+    
+    return select;
+  }
 
   addButtonAdd(div, className) {
     const btn = document.createElement('button');
