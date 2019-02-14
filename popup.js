@@ -5,8 +5,8 @@ const table = document.getElementById('payment-table');
 Payment.table = table;
 
 
-const ulCategory = document.getElementById('ul-cat');
-Payment.ulCategory = ulCategory;
+const divAside = document.getElementById('aside-left');
+Payment.divAside = divAside;
 
 const divMain = document.getElementById('main');
 Payment.divMain = divMain;

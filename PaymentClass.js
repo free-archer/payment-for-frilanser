@@ -28,8 +28,8 @@ class PaymentClass {
     this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
     this.addButtonSave(this.divMain, ['btn', 'btn-save']); 
 
-    const inputClient= this.addInput("", "text", "client", "input-client");
-    this.ulCat.appendChild(inputClient);
+    const inputClient= this.addInputClient("", "text", "client", "input-client");
+    this.divAside.appendChild(inputClient);
   };
 
  setStorage() {
@@ -47,26 +47,28 @@ class PaymentClass {
         const Data = result.pymentData;
         this.Data = Data;
 
-        this.fullClients(this.ulCategory);
+        this.getClients();
+        this.fullClients();
         this.fullTable(Data);
        });
       } else {
         if (localStorage["pymentData"]) {
           const Data = JSON.parse(localStorage["pymentData"]);
           this.Data = Data;
-          this.fullClients(this.ulCategory);
+
+          this.getClients();
+          this.fullClients();
           this.fullTable(Data);
         }
     }
   };
 
-  fullClients(ul) {
-    this.getClients();
-    
+  fullClients() {
+    this.ulCat.innerHTML = '';
     for (const client of this.Clients) {
       const li = document.createElement('li');
       li.textContent = client;
-      ul.appendChild(li);
+      this.ulCat.appendChild(li);
       
       li.addEventListener('click', (env) => {
         const itClient = env.currentTarget.textContent;
@@ -138,7 +140,7 @@ class PaymentClass {
     row.insertCell(0).appendChild(inputId);
     row.insertCell(1).appendChild(this.addInput(element.date, 'date', 'date', 'input-date'));
     row.insertCell(2).appendChild(this.addInput(element.summa, 'number', 'summa', 'input-summa'));
-    row.insertCell(3).appendChild(this.addSelect('client-select'));
+    row.insertCell(3).appendChild(this.addSelect(element.client,'client-select'));
     row.insertCell(4).appendChild(this.addInput(element.comment, 'text', 'comment', 'input-comment'));
 
     row.insertCell(5).appendChild(this.addButtonDel());
@@ -156,9 +158,15 @@ class PaymentClass {
     {
       const itCell = itRow.cells[cell];
       const cildNode = itCell.childNodes[0];
-      if (cildNode.nodeName == 'INPUT') {
+
+      switch (cildNode.nodeName) {
+        case 'INPUT' :
         itData[cildNode.name] = cildNode.value;
-      } else {
+        break;
+        case 'SELECT':
+        itData[cildNode.name] = cildNode.value;
+        break;
+        default:
         itData[cildNode.name] = cildNode.textContent;
       }
     }
@@ -180,10 +188,30 @@ class PaymentClass {
 
     return input;
   };
+  addInputClient(value, type, name, className) {
+    const input = document.createElement('input');
+    input.setAttribute("type", type);
+    input.setAttribute("name", name);
+    input.value = value;
+    input.valueAsDat = value;
+    input.classList.add(className);
 
-  addSelect(className) {
+    input.onchange = (env) => {
+      this.Clients.add(input.value);
+
+      this.fullClients();
+      this.fullTable(this.Data);
+
+      input.value= '';
+    }
+
+    return input;
+  };
+
+  addSelect(curentClient, className) {
     const select = document.createElement('select');
     select.classList.add(className)
+    select.setAttribute("name", "client");
 
     for (const client of this.Clients) {
       if (client != 'Все') {
@@ -191,6 +219,13 @@ class PaymentClass {
         option.value = client;
         option.textContent = client;
         select.appendChild(option);
+      }
+
+      select.value = curentClient;
+  
+      select.onchange = (env) => {
+        const rowIndex = env.currentTarget.rowIndex;
+        this.setRowDatatoData(rowIndex);
       }
     }
     
