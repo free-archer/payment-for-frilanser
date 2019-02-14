@@ -26,7 +26,10 @@ class PaymentClass {
     this.getStorage();
 
     this.addButtonAdd(this.divMain, ['btn', 'btn-add']);
-    this.addButtonSave(this.divMain, ['btn', 'btn-save']);      
+    this.addButtonSave(this.divMain, ['btn', 'btn-save']); 
+
+    const inputClient= this.addInput("", "text", "client", "input-client");
+    this.ulCat.appendChild(inputClient);
   };
 
  setStorage() {

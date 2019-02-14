@@ -16,8 +16,10 @@ body, ul, li, input, button {
     background: #E1E3E0;
 }
 #aside-left {
+    display: flex;
+    justify-content: center;
     margin-right: 10px;
-    min-width: 80px;
+    min-width: 90px;
 }
 
 #payment-table {
@@ -61,6 +63,10 @@ input {
     width: 120px;
 }
 .input-summa {
+    text-align: center;
+    width: 70px;
+}
+.input-client {
     text-align: center;
     width: 70px;
 }
