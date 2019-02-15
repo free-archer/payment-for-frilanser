@@ -2,18 +2,18 @@
   "manifest_version": 2,
   "name": "payment-for-frilanser",
   "description": "payment-for-frilanser",
-  "version": "0.2",
+  "version": "0.3",
 
   "background": {
     "scripts": [
-      "popup.js",
-      "PaymentClass.js"
+      "paymentclass.js",
+      "popup.js"
     ],
     "persistent": false
   },
 
   "browser_action": {
-    "default_icon": "finance-money.svg",
+    "default_icon": "bitcoin32.ico",
     "default_popup": "popup.html"
   },
   "permissions": [

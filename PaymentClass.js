@@ -19,7 +19,7 @@ class PaymentClass {
     this.Data = [];
     this.Clients = new Set(['Все']);
   }
-
+  
   Init() {
     this.clearTable();
 
