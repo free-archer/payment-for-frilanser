@@ -10,7 +10,11 @@
 
 Думаю будет полезно для ознакомления с разработкой расширений для chrome и изучения кода на JS. Пример как динамически создавать таблицы, добавлять, удялять и фильтровать данные в них.
 
-
 ![Скриншот 1:](https://github.com/Bespalov-AV/payment-for-frilanser/raw/master/screenshots/pyment-frilanse1.png)
 ![Скриншот 2:](https://github.com/Bespalov-AV/payment-for-frilanser/raw/master/screenshots/pyment-frilanse2.png)
+
+Так же у меня есть пример такого же приложения написанный с использованием фреймворка Vue JS. Очень полезно сравнить и понять силу фреймворков на подобии Vue, React, Angular. 
+Здесь на чистом JS у меня вышло 280 строк JavaScript кода, а c использованием Vue всего 80. Ощутимая разница даже на таком простом приложении.
+
+https://github.com/Bespalov-AV/payment-for-frilanser
 
